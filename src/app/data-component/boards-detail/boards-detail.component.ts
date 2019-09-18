@@ -11,7 +11,7 @@ import { isNullOrUndefined } from 'util';
 })
 export class BoardsDetailComponent implements OnInit {
 
-  board = {};
+  board:any = {};
   isadmin: Boolean = false;
 
   constructor(private route: ActivatedRoute, private router: Router, private fs: FsService, 
