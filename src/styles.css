@@ -1,6 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 @import '~bootstrap/dist/css/bootstrap.min.css';
 @import 'https://use.fontawesome.com/releases/v5.5.0/css/all.css';
+@import '../node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css';
 
 * {
   -webkit-box-sizing: border-box;
@@ -22,6 +23,10 @@ body {
   width: 16px;
   height: 16px;
   vertical-align: text-bottom;
+}
+
+.boards-section {
+    padding: 25px;
 }
 
 h1,
@@ -671,4 +676,15 @@ body .table thead th {
   .px-logo {
     display: none;
   }
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+tr.mat-row {
+    cursor: pointer;
+}
+
+tr.mat-row:hover {
+    background-color: #d3d3d3;
 }

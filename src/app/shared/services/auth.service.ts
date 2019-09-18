@@ -4,6 +4,8 @@ import { auth } from 'firebase/app';
 import { AngularFireAuth } from "@angular/fire/auth";
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { Router } from "@angular/router";
+import { switchMap } from 'rxjs/operators';
+import { of, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +13,7 @@ import { Router } from "@angular/router";
 
 export class AuthService {
   userData: any; // Save logged in user data
+  userDatum: Observable<User>;
 
   constructor(
     public afs: AngularFirestore,   // Inject Firestore service
@@ -24,12 +27,25 @@ export class AuthService {
       if (user) {
         this.userData = user;
         localStorage.setItem('user', JSON.stringify(this.userData));
-        JSON.parse(localStorage.getItem('user'));
+        JSON.parse(localStorage.getItem('user'));   
       } else {
         localStorage.setItem('user', null);
         JSON.parse(localStorage.getItem('user'));
       }
-    })
+    });
+
+  }  
+
+  getUser() {
+    this.userDatum = this.afAuth.authState.pipe(switchMap(userr => {
+      if (userr) {
+        return this.afs.doc<User>(`users/${userr.uid}`).valueChanges()
+      } else {
+        return of(null)
+      }
+    }));
+
+    return this.userDatum;
   }
 
   // Sign in with email/password
@@ -37,7 +53,7 @@ export class AuthService {
     return this.afAuth.auth.signInWithEmailAndPassword(email, password)
       .then((result) => {
         this.ngZone.run(() => {
-          this.router.navigate(['dashboard']);
+          this.router.navigate(['boards']);
         });
         this.SetUserData(result.user);
       }).catch((error) => {
@@ -51,8 +67,8 @@ export class AuthService {
       .then((result) => {
         /* Call the SendVerificaitonMail() function when new user sign 
         up and returns promise */
-        this.SendVerificationMail();
         this.SetUserData(result.user);
+        this.SendVerificationMail();
       }).catch((error) => {
         window.alert(error.message)
       })
@@ -92,7 +108,7 @@ export class AuthService {
     return this.afAuth.auth.signInWithPopup(provider)
     .then((result) => {
        this.ngZone.run(() => {
-          this.router.navigate(['dashboard']);
+          this.router.navigate(['boards']);
         })
       this.SetUserData(result.user);
     }).catch((error) => {
@@ -110,7 +126,10 @@ export class AuthService {
       email: user.email,
       displayName: user.displayName,
       photoURL: user.photoURL,
-      emailVerified: user.emailVerified
+      emailVerified: user.emailVerified,
+      roles: {
+        subscriber: true
+      }
     }
     return userRef.set(userData, {
       merge: true

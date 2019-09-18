@@ -18,6 +18,7 @@ export class AuthGuard implements CanActivate {
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
     if(this.authService.isLoggedIn !== true) {
+      alert("Your Id is not verified. Please visit you mail to verify your account.");
       this.router.navigate(['sign-in'])
     }
     return true;

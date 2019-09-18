@@ -11,6 +11,10 @@ import { VerifyEmailComponent } from '../../components/verify-email/verify-email
 // Import canActivate guard services
 import { AuthGuard } from "../../shared/guard/auth.guard";
 import { SecureInnerPagesGuard } from "../../shared/guard/secure-inner-pages.guard";
+import { BoardsComponent } from '../../data-component/boards/boards.component';
+import { BoardsDetailComponent } from '../../data-component/boards-detail/boards-detail.component';
+import { BoardsCreateComponent } from '../../data-component/boards-create/boards-create.component';
+import { BoardsEditComponent } from '../../data-component/boards-edit/boards-edit.component';
 
 // Include route guard in routes array
 const routes: Routes = [
@@ -19,7 +23,11 @@ const routes: Routes = [
   { path: 'register-user', component: SignUpComponent, canActivate: [SecureInnerPagesGuard]},
   { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
   { path: 'forgot-password', component: ForgotPasswordComponent, canActivate: [SecureInnerPagesGuard] },
-  { path: 'verify-email-address', component: VerifyEmailComponent, canActivate: [SecureInnerPagesGuard] }
+  { path: 'verify-email-address', component: VerifyEmailComponent, canActivate: [SecureInnerPagesGuard] },
+  { path: 'boards', component: BoardsComponent, data: { title: 'Boards List' }, canActivate: [AuthGuard]},
+  { path: 'boards-details/:id', component: BoardsDetailComponent, data: { title: 'Boards Details' }},
+  { path: 'boards-create', component: BoardsCreateComponent, data: { title: 'Create Boards' }},
+  { path: 'boards-edit/:id', component: BoardsEditComponent, data: { title: 'Edit Boards' }},
 ];
 
 @NgModule({

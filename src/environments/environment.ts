@@ -5,13 +5,13 @@
 export const environment = {
   production: false,
   firebase : {
-    apiKey: "AIzaSyDqr8ldsQD07gn1d7m6DYJtvwmelxH8rmk",
-    authDomain: "cloud-canvas-run.firebaseapp.com",
-    databaseURL: "https://cloud-canvas-run.firebaseio.com",
-    projectId: "cloud-canvas-run",
+    apiKey: "AIzaSyABjI3I8419WMY7G9ZpFr6vR65aepYzPWQ",
+    authDomain: "fir-check-fdbf8.firebaseapp.com",
+    databaseURL: "https://fir-check-fdbf8.firebaseio.com",
+    projectId: "fir-check-fdbf8",
     storageBucket: "",
-    messagingSenderId: "69590405052",
-    appId: "1:69590405052:web:137068a81c8d86b25265b9"
+    messagingSenderId: "155524906129",
+    appId: "1:155524906129:web:8f3109e4dfeaf335f0d330"    
   }
 };
 
