@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { DataSource } from '@angular/cdk/collections';
 import { FsService } from '../../shared/services/fs.service';
 import { AuthService } from 'src/app/shared/services/auth.service';
-import { AngularFireAuth } from '@angular/fire/auth';
 import { isNullOrUndefined, isUndefined } from 'util';
 
 @Component({
@@ -20,17 +19,15 @@ export class BoardsComponent implements OnInit {
     public authService: AuthService) {
   }
 
-  ngOnInit() {
+  public ngOnInit():void {
 
     if(this.authService.isLoggedIn === true) {
-      this.authService.getUser().subscribe(res =>
-        // console.log(JSON.stringify(res) + ' ' + isNullOrUndefined(res.roles.admin) + ' ' + isUndefined(res.roles.admin) + ' ' + isUndefined(res.roles.subscriber))
-        this.isadmin = (isNullOrUndefined(res.roles.admin) ? false : res.roles.admin)
-      );
-    }
-    
+      this.authService.getUser().subscribe(res => {
+        // console.log(JSON.stringify(res) + ' ' + isNullOrUndefined(res.roles.admin));
+        this.isadmin = (isNullOrUndefined(res.roles.admin) ? false : res.roles.admin);
+      });
+    }    
   }
-
 }
 
 export class BoardDataSource extends DataSource<any> {
@@ -44,6 +41,5 @@ export class BoardDataSource extends DataSource<any> {
   }
 
   disconnect() {
-
   }
 }

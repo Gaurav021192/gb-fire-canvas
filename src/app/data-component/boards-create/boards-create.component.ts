@@ -15,9 +15,12 @@ export class BoardsCreateComponent implements OnInit {
   description:string='';
   author:string='';
 
-  constructor(private router: Router, private fs: FsService, private formBuilder: FormBuilder) { }
+  constructor(
+    private router: Router,
+    private fs: FsService, 
+    private formBuilder: FormBuilder) { }
 
-  ngOnInit() {
+  public ngOnInit(): void {
     this.boardsForm = this.formBuilder.group({
       'title' : [null, Validators.required],
       'description' : [null, Validators.required],
@@ -25,14 +28,13 @@ export class BoardsCreateComponent implements OnInit {
     });
   }
 
-  onFormSubmit(form:NgForm) {
+  public onFormSubmit(form:NgForm): void {
     this.fs.postBoards(form)
       .subscribe(res => {
           let id = res['key'];
           this.router.navigate(['/boards-details', id]);
         }, (err) => {
           console.log(err);
-        });
+      });
   }
-
 }

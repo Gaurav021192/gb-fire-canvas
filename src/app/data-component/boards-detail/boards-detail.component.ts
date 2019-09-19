@@ -14,30 +14,32 @@ export class BoardsDetailComponent implements OnInit {
   board:any = {};
   isadmin: Boolean = false;
 
-  constructor(private route: ActivatedRoute, private router: Router, private fs: FsService, 
+  constructor(
+    private route: ActivatedRoute, 
+    private router: Router, 
+    private fs: FsService, 
     public authService: AuthService) { }
 
-  ngOnInit() {
+  public ngOnInit(): void {
     this.getBoardDetails(this.route.snapshot.params['id']);
 
     if(this.authService.isLoggedIn === true) {
-      this.authService.getUser().subscribe(res =>
-        // console.log(JSON.stringify(res) + ' ' + isNullOrUndefined(res.roles.admin) + ' ' + isUndefined(res.roles.admin) + ' ' + isUndefined(res.roles.subscriber))
-        this.isadmin = (isNullOrUndefined(res.roles.admin) ? false : res.roles.admin)
-      );
-    }
-    
+      this.authService.getUser().subscribe(res => {
+        // console.log(JSON.stringify(res) + ' ' + isNullOrUndefined(res.roles.admin));
+        this.isadmin = (isNullOrUndefined(res.roles.admin) ? false : res.roles.admin);
+      });
+    }    
   }
 
-  getBoardDetails(id) {
+  public getBoardDetails(id: any): void {
     this.fs.getBoard(id)
       .subscribe(data => {
-        console.log(data);
+        // console.log(data);
         this.board = data;
       });
   }
 
-  deleteBoard(id) {
+  public deleteBoard(id: any): void {
     this.fs.deleteBoards(id)
       .subscribe(res => {
           this.router.navigate(['/boards']);

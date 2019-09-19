@@ -14,6 +14,7 @@ import { of, Observable } from 'rxjs';
 export class AuthService {
   userData: any; // Save logged in user data
   userDatum: Observable<User>;
+  userd: any;
 
   constructor(
     public afs: AngularFirestore,   // Inject Firestore service
@@ -33,23 +34,20 @@ export class AuthService {
         JSON.parse(localStorage.getItem('user'));
       }
     });
-
   }  
 
-  getUser() {
-    this.userDatum = this.afAuth.authState.pipe(switchMap(userr => {
-      if (userr) {
-        return this.afs.doc<User>(`users/${userr.uid}`).valueChanges()
+  public getUser() {    
+    this.userd = this.afAuth.auth.currentUser; // Current Logged in user
+      if (this.userd) {
+        this.userDatum =  this.afs.doc<User>(`users/${this.userd.uid}`).valueChanges()
       } else {
         return of(null)
       }
-    }));
-
     return this.userDatum;
   }
 
   // Sign in with email/password
-  SignIn(email, password) {
+  public SignIn(email: string, password: string) {
     return this.afAuth.auth.signInWithEmailAndPassword(email, password)
       .then((result) => {
         this.ngZone.run(() => {
@@ -62,7 +60,7 @@ export class AuthService {
   }
 
   // Sign up with email/password
-  SignUp(email, password) {
+  public SignUp(email: string, password: string) {
     return this.afAuth.auth.createUserWithEmailAndPassword(email, password)
       .then((result) => {
         /* Call the SendVerificaitonMail() function when new user sign 
@@ -75,7 +73,7 @@ export class AuthService {
   }
 
   // Send email verfificaiton when new user sign up
-  SendVerificationMail() {
+  public SendVerificationMail() {
     return this.afAuth.auth.currentUser.sendEmailVerification()
     .then(() => {
       this.router.navigate(['verify-email-address']);
@@ -83,7 +81,7 @@ export class AuthService {
   }
 
   // Reset Forggot password
-  ForgotPassword(passwordResetEmail) {
+  public ForgotPassword(passwordResetEmail: any) {
     return this.afAuth.auth.sendPasswordResetEmail(passwordResetEmail)
     .then(() => {
       window.alert('Password reset email sent, check your inbox.');
@@ -92,10 +90,15 @@ export class AuthService {
     })
   }
 
+  isverified: boolean;
   // Returns true when user is looged in and email is verified
   get isLoggedIn(): boolean {
-    const user = JSON.parse(localStorage.getItem('user'));
-    return (user !== null && user.emailVerified !== false) ? true : false;
+    // const user = JSON.parse(localStorage.getItem('user'));
+    // return (user !== null && user.emailVerified !== false) ? true : false;
+    this.afAuth.authState.subscribe(user => {
+      this.isverified =  (user !== null && user.emailVerified !== false) ? true : false;
+    });
+    return this.isverified;
   }
 
   // Sign in with Google
@@ -104,7 +107,7 @@ export class AuthService {
   }
 
   // Auth logic to run auth providers
-  AuthLogin(provider) {
+  AuthLogin(provider: any) {
     return this.afAuth.auth.signInWithPopup(provider)
     .then((result) => {
        this.ngZone.run(() => {

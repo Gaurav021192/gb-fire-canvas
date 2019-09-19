@@ -16,9 +16,13 @@ export class BoardsEditComponent implements OnInit {
   description:string = '';
   author:string = '';
 
-  constructor(private router: Router, private route: ActivatedRoute, private fs: FsService, private formBuilder: FormBuilder) { }
+  constructor(
+    private router: Router, 
+    private route: ActivatedRoute, 
+    private fs: FsService, 
+    private formBuilder: FormBuilder) { }
 
-  ngOnInit() {
+  public ngOnInit(): void {
     this.getBoard(this.route.snapshot.params['id']);
     this.boardsForm = this.formBuilder.group({
       'title' : [null, Validators.required],
@@ -27,7 +31,7 @@ export class BoardsEditComponent implements OnInit {
     });
   }
 
-  getBoard(id) {
+  public getBoard(id: any): void {
     this.fs.getBoard(id).subscribe(data => {
       this.id = data.key;
       this.boardsForm.setValue({
@@ -38,7 +42,7 @@ export class BoardsEditComponent implements OnInit {
     });
   }
 
-  onFormSubmit(form:NgForm) {
+  public onFormSubmit(form:NgForm): void {
     this.fs.updateBoards(this.id, form)
       .subscribe(res => {
           this.router.navigate(['/boards']);
@@ -48,7 +52,7 @@ export class BoardsEditComponent implements OnInit {
       );
   }
 
-  boardsDetails() {
+  public boardsDetails(): void {
     this.router.navigate(['/boards-details', this.id]);
   }
 
